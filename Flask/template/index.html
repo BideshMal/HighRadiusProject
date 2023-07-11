@@ -1,0 +1,51 @@
+<!-- index.html -->
+<html>
+  <body>
+    <h1>Enter Order Details</h1>
+    <form id="orderForm">
+      <label for="customerOrderID">Customer Order ID:</label>
+      <input type="text" name="customerOrderID" id="customerOrderID" required><br>
+
+      <label for="salesOrg">Sales Org:</label>
+      <input type="text" name="salesOrg" id="salesOrg" required><br>
+
+      <label for="distributionChannel">Distribution Channel:</label>
+      <input type="text" name="distributionChannel" id="distributionChannel" required><br>
+
+      <label for="customerNumber">Customer Number:</label>
+      <input type="text" name="customerNumber" id="customerNumber" required><br>
+
+      <label for="companyCode">Company Code:</label>
+      <input type="text" name="companyCode" id="companyCode" required><br>
+
+      <label for="orderCurrency">Order Currency:</label>
+      <input type="text" name="orderCurrency" id="orderCurrency" required><br>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="predictionResult"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#orderForm').submit(function(event) {
+          event.preventDefault();
+          var form = $(this);
+          var url = form.attr('action');
+          var formData = JSON.stringify(form.serializeArray());
+
+          $.ajax({
+            type: 'POST',
+            url: '/predict',
+            data: formData,
+            contentType: 'application/json',
+            success: function(response) {
+              $('#predictionResult').text('Predicted amount in USD: ' + response.amountInUSD);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
